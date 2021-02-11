@@ -201,7 +201,7 @@ mod tests {
         let prices = [
             (TokenLike::Id(TokenId(1)), 10_u64.into()),
             (TokenLike::Id(TokenId(15)), 10_500_u64.into()),
-            ("ETH".into(), 0_u64.into()),
+            ("BNB".into(), 0_u64.into()),
             (Address::default().into(), 1_u64.into()),
         ];
         let fee_ticker = dummy_fee_ticker(&prices);
@@ -276,7 +276,7 @@ mod tests {
             expected_token
         );
         assert_eq!(
-            &client.token_by_id(&TokenLike::parse("ETH")).await?.unwrap(),
+            &client.token_by_id(&TokenLike::parse("BNB")).await?.unwrap(),
             expected_token
         );
         assert_eq!(client.token_by_id(&TokenLike::parse("XM")).await?, None);

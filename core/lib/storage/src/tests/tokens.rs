@@ -23,7 +23,7 @@ async fn tokens_storage(mut storage: StorageProcessor<'_>) -> QueryResult<()> {
     let eth_token = Token {
         id: TokenId(0),
         address: "0000000000000000000000000000000000000000".parse().unwrap(),
-        symbol: "ETH".into(),
+        symbol: "BNB".into(),
         decimals: 18,
     };
     assert_eq!(tokens[&TokenId(0)], eth_token);

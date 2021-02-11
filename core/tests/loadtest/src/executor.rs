@@ -178,7 +178,7 @@ impl LoadtestExecutor {
                     let eth_balance =
                         closest_packable_fee_amount(&(&self.fees.eth * BigUint::from(2_u64)));
                     self.main_wallet
-                        .transfer_to("ETH", eth_balance, wallet.address())
+                        .transfer_to("BNB", eth_balance, wallet.address())
                         .await?;
                     wallet.approve_erc20_deposits().await?;
                 }
@@ -445,7 +445,7 @@ impl LoadtestExecutor {
                 if balance > self.fees.eth {
                     let amount = balance - &self.fees.eth;
                     wallet
-                        .transfer_to("ETH", closest_packable_token_amount(&amount), main_address)
+                        .transfer_to("BNB", closest_packable_token_amount(&amount), main_address)
                         .await?;
                 }
             }

@@ -31,7 +31,7 @@ pub fn wire_tests<'a>(builder: ApiTestsBuilder<'a>, monitor: &'a Monitor) -> Api
                 .get_tx_fee(
                     TxFeeTypes::FastWithdraw,
                     monitor.api_data_pool.read().await.random_address().0,
-                    "ETH",
+                    "BNB",
                 )
                 .await?;
             Ok(())

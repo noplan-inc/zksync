@@ -116,7 +116,7 @@ pub fn wire_tests<'a>(builder: ApiTestsBuilder<'a>, monitor: &'a Monitor) -> Api
     let tokens = [
         // Ethereum.
         TokenLike::Id(TokenId(0)),
-        TokenLike::Symbol("ETH".to_string()),
+        TokenLike::Symbol("BNB".to_string()),
         TokenLike::Address(Address::default()),
         // PHNX, see rest/v1/test_utils.rs
         TokenLike::Id(TokenId(1)),

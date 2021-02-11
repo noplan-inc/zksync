@@ -79,7 +79,7 @@ async fn get_ethereum_balance<S: EthereumSigner>(
     address: Address,
     token: &Token,
 ) -> Result<U256, anyhow::Error> {
-    if token.symbol == "ETH" {
+    if token.symbol == "BNB" {
         return eth_provider
             .client()
             .eth_balance(address)
@@ -171,7 +171,7 @@ where
     let handle = sync_wallet
         .start_transfer()
         .to(zksync_depositor_wallet.address())
-        .token("ETH")?
+        .token("BNB")?
         .amount(1_000_000u64)
         .send()
         .await;
@@ -520,7 +520,7 @@ async fn init_account_with_one_ether(
 
     // Transfer funds from "rich" account to a randomly created one (so we won't reuse the same
     // account in subsequent test runs).
-    transfer_to("ETH", one_ether(), eth_address).await?;
+    transfer_to("BNB", one_ether(), eth_address).await?;
 
     let provider = RpcProvider::new(Network::Localhost);
 
@@ -534,7 +534,7 @@ async fn init_account_with_one_ether(
     let ethereum = wallet.ethereum(web3_addr()).await?;
 
     let deposit_tx_hash = ethereum
-        .deposit("ETH", one_ether() / 2, wallet.address())
+        .deposit("BNB", one_ether() / 2, wallet.address())
         .await?;
 
     ethereum.wait_for_tx(deposit_tx_hash).await?;
@@ -545,7 +545,7 @@ async fn init_account_with_one_ether(
     if !wallet.is_signing_key_set().await? {
         let handle = wallet
             .start_change_pubkey()
-            .fee_token("ETH")?
+            .fee_token("BNB")?
             .send()
             .await?;
 
@@ -596,7 +596,7 @@ async fn comprehensive_test() -> Result<(), anyhow::Error> {
 
     let token_eth = sync_depositor_wallet
         .tokens
-        .resolve("ETH".into())
+        .resolve("BNB".into())
         .ok_or_else(|| anyhow::anyhow!("Error resolve token"))?;
     let token_dai = sync_depositor_wallet
         .tokens
@@ -607,9 +607,9 @@ async fn comprehensive_test() -> Result<(), anyhow::Error> {
 
     // Move ETH to wallets so they will have some funds for L1 transactions.
     let eth_deposit_amount = U256::from(10).pow(17.into()); // 0.1 ETH
-    transfer_to("ETH", eth_deposit_amount, sync_depositor_wallet.address()).await?;
-    transfer_to("ETH", eth_deposit_amount, alice_wallet1.address()).await?;
-    transfer_to("ETH", eth_deposit_amount, bob_wallet1.address()).await?;
+    transfer_to("BNB", eth_deposit_amount, sync_depositor_wallet.address()).await?;
+    transfer_to("BNB", eth_deposit_amount, alice_wallet1.address()).await?;
+    transfer_to("BNB", eth_deposit_amount, bob_wallet1.address()).await?;
 
     transfer_to("DAI", dai_deposit_amount, sync_depositor_wallet.address()).await?;
 
@@ -734,7 +734,7 @@ async fn simple_transfer() -> Result<(), anyhow::Error> {
     let handle = wallet
         .start_transfer()
         .to(wallet.signer.address)
-        .token("ETH")?
+        .token("BNB")?
         .amount(1_000_000u64)
         .send()
         .await?;
@@ -755,7 +755,7 @@ async fn batch_transfer() -> Result<(), anyhow::Error> {
     const RECIPIENT_COUNT: usize = 4;
     let recipients = vec![eth_random_account_credentials().0; RECIPIENT_COUNT];
 
-    let token_like = TokenLike::Symbol("ETH".to_owned());
+    let token_like = TokenLike::Symbol("BNB".to_owned());
     let token = wallet
         .tokens
         .resolve(token_like.clone())

@@ -91,7 +91,7 @@ impl DepositingAccountBalances {
 
         for op in pending_ops.deposits {
             let token_symbol = if *op.token_id == 0 {
-                "ETH".to_string()
+                "BNB".to_string()
             } else {
                 tokens
                     .get_token(storage, op.token_id)

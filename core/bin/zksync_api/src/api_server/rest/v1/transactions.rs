@@ -721,7 +721,7 @@ mod tests {
         let phnx_transfer_hash = phnx_transfer.hash();
         let (tx, _) = from.sign_transfer(
             TokenId(0),
-            "ETH",
+            "BNB",
             0u64.into(),
             200u64.into(), // Here we pay fees for both transfers in ETH.
             &to.address,
@@ -767,7 +767,7 @@ mod tests {
         // Submit non-withdraw transaction with the enabled fast-processing.
         let (tx, eth_sig) = from.sign_transfer(
             TokenId(0),
-            "ETH",
+            "BNB",
             10_u64.into(),
             10_u64.into(),
             &to.address,
@@ -802,7 +802,7 @@ mod tests {
         // Submit withdraw transaction with the enabled fast-processing.
         let (tx, eth_sig) = from.sign_withdraw(
             TokenId(0),
-            "ETH",
+            "BNB",
             100u64.into(),
             10u64.into(),
             &to.address,

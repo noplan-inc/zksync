@@ -189,7 +189,7 @@ async fn accounts_scope() -> anyhow::Result<()> {
     // Check account information about unconfirmed deposits.
     let account_info = client.account_info(account_id).await?.unwrap();
 
-    let depositing_balances = &account_info.depositing.balances["ETH"];
+    let depositing_balances = &account_info.depositing.balances["BNB"];
     assert_eq!(*depositing_balances.expected_accept_block, 5);
     assert_eq!(depositing_balances.amount.0, 100_500_u64.into());
 
