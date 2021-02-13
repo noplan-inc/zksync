@@ -246,6 +246,11 @@ impl RpcApp {
         token: TokenLike,
     ) -> Result<bool> {
         let (sender, receiver) = oneshot::channel();
+        // vlog::info!("token: {}", token);
+        // // BNB is eth in BSC.
+        // if token.is_eth() {
+        //     return Ok(true);
+        // }
         ticker_request_sender
             .send(TickerRequest::IsTokenAllowed {
                 token: token.clone(),

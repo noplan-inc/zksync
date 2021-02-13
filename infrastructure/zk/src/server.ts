@@ -11,7 +11,7 @@ export async function server() {
 export async function genesis() {
     await db.reset();
     await utils.confirmAction();
-    await utils.spawn('cargo run --bin zksync_server --release -- --genesis | tee genesis.log');
+    await utils.spawn('cargo run --bin zksync_server -- --genesis | tee genesis.log');
     const genesisRoot = fs.readFileSync('genesis.log').toString();
     const date = new Date();
     const [year, month, day, hour, minute, second] = [

@@ -30,8 +30,12 @@ impl CoinGeckoAPI {
 
         let mut token_ids = HashMap::new();
         for token in token_list.0 {
+            vlog::info!("token_symbol: {:?}", token.symbol);
             token_ids.insert(token.symbol, token.id);
         }
+
+        token_ids.insert("bnb".to_string(), "binancecoin".to_string());
+
         Ok(Self {
             base_url,
             client,
@@ -47,11 +51,17 @@ impl TokenPriceAPI for CoinGeckoAPI {
         let token_id = self
             .token_ids
             .get(&token_symbol.to_lowercase())
-            .or_else(|| self.token_ids.get(token_symbol))
+            .or_else(|| {
+                vlog::info!(
+                    "token_symbol: {:?}, token_symbol: {:?}",
+                    self.token_ids,
+                    token_symbol
+                );
+                self.token_ids.get(token_symbol)
+            })
             .ok_or_else(|| {
                 anyhow::format_err!("Token '{}' is not listed on CoinGecko", token_symbol)
             })?;
-
         let market_chart_url = self
             .base_url
             .join(format!("api/v3/coins/{}/market_chart", token_id).as_str())

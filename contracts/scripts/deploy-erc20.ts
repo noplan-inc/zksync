@@ -12,6 +12,7 @@ const ethTestConfig = JSON.parse(fs.readFileSync(`${testConfigPath}/eth.json`, {
 
 const provider = web3Provider();
 const wallet = Wallet.fromMnemonic(ethTestConfig.mnemonic, "m/44'/60'/0'/0/1").connect(provider);
+console.log(wallet.address);
 
 type Token = {
     address: string | null;
@@ -21,11 +22,16 @@ type Token = {
 };
 
 async function deployToken(token: Token): Promise<Token> {
+    const nonce = await wallet.getTransactionCount() + 1;
+    console.log(nonce);
     const erc20 = await deployContract(
         wallet,
         readContractCode('TestnetERC20Token'),
         [token.name, token.symbol, token.decimals],
-        { gasLimit: 5000000 }
+        // 30000000	bsc gas limit
+        // 5000000
+        // 20000000000
+        { gasLimit: 30000000, nonce }
     );
 
     await erc20.mint(wallet.address, parseEther('3000000000'));

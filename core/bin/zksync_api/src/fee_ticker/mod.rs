@@ -374,29 +374,53 @@ impl<API: FeeTickerAPI, INFO: FeeTickerInfo, WATCHER: TokenWatcher> FeeTicker<AP
         token: TokenLike,
         recipient: Address,
     ) -> Result<Fee, anyhow::Error> {
-        let zkp_cost_chunk = self.config.zkp_cost_chunk_usd.clone();
-        let token = self.api.get_token(token).await?;
+        // let zkp_cost_chunk = self.config.zkp_cost_chunk_usd.clone();
+        // let token = self.api.get_token(token).await?;
+        //
+        // let gas_price_wei = self.api.get_gas_price_wei().await?;
+        // let scale_gas_price = Self::risk_gas_price_estimate(gas_price_wei.clone());
+        // let is_token_subsidized = self.is_token_subsidized(&token);
+        // let wei_price_usd = self.wei_price_usd().await?;
+        // let token_usd_risk = self.token_usd_risk(&token).await?;
+        //
+        // let (fee_type, gas_tx_amount, op_chunks) = self
+        //     .gas_tx_amount(is_token_subsidized, tx_type, recipient)
+        //     .await;
 
-        let gas_price_wei = self.api.get_gas_price_wei().await?;
-        let scale_gas_price = Self::risk_gas_price_estimate(gas_price_wei.clone());
-        let is_token_subsidized = self.is_token_subsidized(&token);
-        let wei_price_usd = self.wei_price_usd().await?;
-        let token_usd_risk = self.token_usd_risk(&token).await?;
+        // let zkp_fee = (zkp_cost_chunk * op_chunks) * token_usd_risk.clone();
+        // let gas_fee =
+        //     (wei_price_usd * gas_tx_amount.clone() * scale_gas_price.clone()) * token_usd_risk;
 
-        let (fee_type, gas_tx_amount, op_chunks) = self
-            .gas_tx_amount(is_token_subsidized, tx_type, recipient)
-            .await;
+        let (fee_type, op_chunks) = match tx_type {
+            TxFeeTypes::Withdraw => (OutputFeeType::Withdraw, WithdrawOp::CHUNKS),
+            TxFeeTypes::FastWithdraw => (OutputFeeType::FastWithdraw, WithdrawOp::CHUNKS),
+            TxFeeTypes::Transfer => {
+                if self.is_account_new(recipient).await {
+                    (OutputFeeType::TransferToNew, TransferToNewOp::CHUNKS)
+                } else {
+                    (OutputFeeType::Transfer, TransferOp::CHUNKS)
+                }
+            }
+            TxFeeTypes::ChangePubKey {
+                onchain_pubkey_auth,
+            } => (
+                OutputFeeType::ChangePubKey {
+                    onchain_pubkey_auth,
+                },
+                ChangePubKeyOp::CHUNKS,
+            ),
+        };
 
-        let zkp_fee = (zkp_cost_chunk * op_chunks) * token_usd_risk.clone();
-        let gas_fee =
-            (wei_price_usd * gas_tx_amount.clone() * scale_gas_price.clone()) * token_usd_risk;
+        // let gas = BigUint::new<vec![10000]>;
+        let zkp_fee = Ratio::new(BigUint::new(vec![10000]), BigUint::new(vec![100]));
+        let gas_fee = zkp_fee.clone();
 
         Ok(Fee::new(
             fee_type,
             zkp_fee,
             gas_fee,
-            gas_tx_amount,
-            gas_price_wei,
+            BigUint::new(vec![100]),
+            BigUint::new(vec![100]),
         ))
     }
 
@@ -405,30 +429,10 @@ impl<API: FeeTickerAPI, INFO: FeeTickerInfo, WATCHER: TokenWatcher> FeeTicker<AP
         token: TokenLike,
         txs: Vec<(TxFeeTypes, Address)>,
     ) -> anyhow::Result<BatchFee> {
-        let zkp_cost_chunk = self.config.zkp_cost_chunk_usd.clone();
-        let token = self.api.get_token(token).await?;
+        let zkp_fee = Ratio::new(BigUint::new(vec![100]), BigUint::new(vec![100]));
+        let total_gas_fee = zkp_fee.clone();
 
-        let gas_price_wei = self.api.get_gas_price_wei().await?;
-        let scale_gas_price = Self::risk_gas_price_estimate(gas_price_wei.clone());
-        let is_token_subsidized = self.is_token_subsidized(&token);
-        let wei_price_usd = self.wei_price_usd().await?;
-        let token_usd_risk = self.token_usd_risk(&token).await?;
-
-        let mut total_gas_tx_amount = BigUint::zero();
-        let mut total_op_chunks = BigUint::zero();
-
-        for (tx_type, recipient) in txs {
-            let (_, gas_tx_amount, op_chunks) = self
-                .gas_tx_amount(is_token_subsidized, tx_type, recipient)
-                .await;
-            total_gas_tx_amount += gas_tx_amount;
-            total_op_chunks += op_chunks;
-        }
-
-        let total_zkp_fee = (zkp_cost_chunk * total_op_chunks) * token_usd_risk.clone();
-        let total_gas_fee =
-            (wei_price_usd * total_gas_tx_amount * scale_gas_price) * token_usd_risk;
-        let total_fee = BatchFee::new(&total_zkp_fee, &total_gas_fee);
+        let total_fee = BatchFee::new(&zkp_fee, &total_gas_fee);
 
         Ok(total_fee)
     }
