@@ -22,7 +22,7 @@ type Token = {
 };
 
 async function deployToken(token: Token): Promise<Token> {
-    const nonce = await wallet.getTransactionCount() + 1;
+    const nonce = (await wallet.getTransactionCount()) + 1;
     console.log(nonce);
     const erc20 = await deployContract(
         wallet,

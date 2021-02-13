@@ -161,7 +161,7 @@ export class Deployer {
 
         console.log(genesis_root);
         console.log({
-            'deployWallet': this.deployWallet,
+            deployWallet: this.deployWallet,
             factoryCode: this.deployFactoryCode,
             array: [
                 this.addresses.GovernanceTarget,
@@ -200,7 +200,7 @@ export class Deployer {
                     this.addresses.Verifier = parsedLog.args.verifier;
                     this.addresses.UpgradeGatekeeper = parsedLog.args.gatekeeper;
                 }
-            } catch (_) { }
+            } catch (_) {}
         }
         const txHash = deployFactoryTx.transactionHash;
         const gasUsed = deployFactoryTx.gasUsed;
