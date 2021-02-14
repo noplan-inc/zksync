@@ -30,7 +30,7 @@ pub struct TransactionsHistoryTestSetup {
 impl TransactionsHistoryTestSetup {
     pub fn new() -> Self {
         let tokens = vec![
-            Token::new(TokenId(0), Address::zero(), "ETH", 18), // used for deposits
+            Token::new(TokenId(0), Address::zero(), "BNB", 18), // used for deposits
             Token::new(TokenId(1), Address::random(), "DAI", 18), // used for transfers
             Token::new(TokenId(2), Address::random(), "FAU", 6), // used for withdraws
         ];

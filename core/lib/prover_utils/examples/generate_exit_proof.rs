@@ -29,7 +29,7 @@ struct Opt {
     #[structopt(long)]
     account_id: String,
 
-    /// Token to withdraw - "ETH" or address of the ERC20 token
+    /// Token to withdraw - "BNB" or address of the ERC20 token
     #[structopt(long)]
     token: String,
 }

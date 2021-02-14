@@ -103,7 +103,7 @@ export async function publish() {
 export async function deploy() {
     await utils.confirmAction();
     console.log('Deploying contracts, results will be inserted into the db');
-    await utils.spawn('yarn contracts deploy-no-build | tee deploy.log');
+    await utils.spawn('yarn contracts deploy-no-build 2>&1 | tee deploy.log');
     const deployLog = fs.readFileSync('deploy.log').toString();
     const envVars = [
         'CONTRACTS_GOVERNANCE_TARGET_ADDR',

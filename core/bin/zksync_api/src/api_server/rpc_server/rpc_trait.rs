@@ -45,7 +45,7 @@ pub trait Rpc {
     #[rpc(name = "contract_address", returns = "ContractAddressResp")]
     fn contract_address(&self) -> FutureResp<ContractAddressResp>;
 
-    /// "ETH" | #ERC20_ADDRESS => {Token}
+    /// "BNB" | #ERC20_ADDRESS => {Token}
     #[rpc(name = "tokens", returns = "Token")]
     fn tokens(&self) -> FutureResp<HashMap<String, Token>>;
 

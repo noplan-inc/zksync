@@ -22,7 +22,7 @@ impl ChainConfig {
     pub fn from_env() -> Self {
         Self {
             circuit: envy_load!("circuit", "CHAIN_CIRCUIT_"),
-            eth: envy_load!("eth", "CHAIN_ETH_"),
+            eth: envy_load!("BNB", "CHAIN_ETH_"),
             state_keeper: envy_load!("state_keeper", "CHAIN_STATE_KEEPER_"),
         }
     }

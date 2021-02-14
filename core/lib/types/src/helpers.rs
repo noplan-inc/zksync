@@ -240,9 +240,9 @@ mod test {
             ),
             (
                 Query {
-                    token: TokenLike::Symbol("ETH".to_string()),
+                    token: TokenLike::Symbol("BNB".to_string()),
                 },
-                r#"{"token":"ETH"}"#,
+                r#"{"token":"BNB"}"#,
             ),
             (
                 Query {

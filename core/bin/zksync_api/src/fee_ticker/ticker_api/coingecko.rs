@@ -30,8 +30,12 @@ impl CoinGeckoAPI {
 
         let mut token_ids = HashMap::new();
         for token in token_list.0 {
+            vlog::info!("token_symbol: {:?}", token.symbol);
             token_ids.insert(token.symbol, token.id);
         }
+
+        token_ids.insert("bnb".to_string(), "binancecoin".to_string());
+
         Ok(Self {
             base_url,
             client,
@@ -47,11 +51,17 @@ impl TokenPriceAPI for CoinGeckoAPI {
         let token_id = self
             .token_ids
             .get(&token_symbol.to_lowercase())
-            .or_else(|| self.token_ids.get(token_symbol))
+            .or_else(|| {
+                vlog::info!(
+                    "token_symbol: {:?}, token_symbol: {:?}",
+                    self.token_ids,
+                    token_symbol
+                );
+                self.token_ids.get(token_symbol)
+            })
             .ok_or_else(|| {
                 anyhow::format_err!("Token '{}' is not listed on CoinGecko", token_symbol)
             })?;
-
         let market_chart_url = self
             .base_url
             .join(format!("api/v3/coins/{}/market_chart", token_id).as_str())
@@ -89,7 +99,7 @@ impl TokenPriceAPI for CoinGeckoAPI {
         // Theoretically we should use min and max price for ETH in our ticker formula when we
         // calculate fee for tx with ETH token. Practically if we use only max price foe ETH it is fine because
         // we don't need to sell this token lnd price only affects ZKP cost of such tx which is negligible.
-        let usd_price = if token_symbol == "ETH" {
+        let usd_price = if token_symbol == "BNB" {
             usd_prices.max()
         } else {
             usd_prices.min()
@@ -140,7 +150,7 @@ mod tests {
         let ticker_url = parse_env("FEE_TICKER_COINGECKO_BASE_URL");
         let client = reqwest::Client::new();
         let api = CoinGeckoAPI::new(client, ticker_url).unwrap();
-        api.get_price("ETH")
+        api.get_price("BNB")
             .await
             .expect("Failed to get data from ticker");
     }

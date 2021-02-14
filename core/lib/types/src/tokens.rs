@@ -15,7 +15,7 @@ pub enum TokenLike {
     Id(TokenId),
     /// Address of the token in the L1.
     Address(Address),
-    /// Symbol associated with token, e.g. "ETH".
+    /// Symbol associated with token, e.g. "BNB".
     Symbol(String),
 }
 
@@ -69,7 +69,7 @@ impl TokenLike {
     /// Checks if the token is Ethereum.
     pub fn is_eth(&self) -> bool {
         match self {
-            TokenLike::Symbol(symbol) => symbol == "ETH",
+            TokenLike::Symbol(symbol) => symbol == "BNB",
             TokenLike::Address(address) => *address == Address::zero(),
             TokenLike::Id(id) => **id == 0,
         }
@@ -81,11 +81,11 @@ impl TokenLike {
 pub struct Token {
     /// id is used for tx signature and serialization
     pub id: TokenId,
-    /// Contract address of ERC20 token or Address::zero() for "ETH"
+    /// Contract address of ERC20 token or Address::zero() for "BNB"
     pub address: Address,
-    /// Token symbol (e.g. "ETH" or "USDC")
+    /// Token symbol (e.g. "BNB" or "USDC")
     pub symbol: String,
-    /// Token precision (e.g. 18 for "ETH" so "1.0" ETH = 10e18 as U256 number)
+    /// Token precision (e.g. 18 for "BNB" so "1.0" ETH = 10e18 as U256 number)
     pub decimals: u8,
 }
 

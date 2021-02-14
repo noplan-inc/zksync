@@ -94,7 +94,7 @@ mod test {
         let client = reqwest::Client::new();
         let api = CoinMarketCapAPI::new(client, ticker_url);
         runtime
-            .block_on(api.get_price("ETH"))
+            .block_on(api.get_price("BNB"))
             .expect("Failed to get data from ticker");
     }
 
@@ -110,10 +110,10 @@ mod test {
         "notice": null
     },
     "data": {
-        "ETH": {
+        "BNB": {
             "id": 1027,
             "name": "Ethereum",
-            "symbol": "ETH",
+            "symbol": "BNB",
             "slug": "ethereum",
             "num_market_pairs": 5153,
             "date_added": "2015-08-07T00:00:00.000Z",
@@ -144,7 +144,7 @@ mod test {
             serde_json::from_str::<CoinmarketCapResponse>(example).expect("serialization failed");
         let token_data = resp
             .data
-            .get(&TokenLike::Symbol("ETH".to_string()))
+            .get(&TokenLike::Symbol("BNB".to_string()))
             .expect("ETH data not found");
         let quote = token_data
             .quote

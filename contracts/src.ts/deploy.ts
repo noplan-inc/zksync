@@ -158,6 +158,22 @@ export class Deployer {
 
     public async deployProxiesAndGatekeeper(ethTxOptions?: ethers.providers.TransactionRequest) {
         let genesis_root = process.env.CONTRACTS_GENESIS_ROOT;
+
+        console.log(genesis_root);
+        console.log({
+            deployWallet: this.deployWallet,
+            factoryCode: this.deployFactoryCode,
+            array: [
+                this.addresses.GovernanceTarget,
+                this.addresses.VerifierTarget,
+                this.addresses.ZkSyncTarget,
+                genesis_root,
+                process.env.ETH_SENDER_SENDER_OPERATOR_COMMIT_ETH_ADDR,
+                this.governorAddress,
+                process.env.CHAIN_STATE_KEEPER_FEE_ACCOUNT_ADDR
+            ],
+            option: { gasLimit: 5000000, ...ethTxOptions }
+        });
         const deployFactoryContract = await deployContract(
             this.deployWallet,
             this.deployFactoryCode,

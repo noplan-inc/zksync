@@ -176,7 +176,7 @@ impl RpcApp {
                 }
 
                 if *id == 0 {
-                    ("ETH".to_string(), token)
+                    ("BNB".to_string(), token)
                 } else {
                     (token.symbol.clone(), token)
                 }

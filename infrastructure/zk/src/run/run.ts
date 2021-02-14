@@ -16,7 +16,8 @@ export async function deployERC20(command: 'dev' | 'new', name?: string, symbol?
                 { "name": "wBTC", "symbol": "wBTC", "decimals":  8 },
                 { "name": "BAT",  "symbol": "BAT",  "decimals": 18 },
                 { "name": "GNT",  "symbol": "GNT",  "decimals": 18 },
-                { "name": "MLTT", "symbol": "MLTT", "decimals": 18 }
+                { "name": "MLTT", "symbol": "MLTT", "decimals": 18 },
+                { "name": "BNB",  "symbol": "BNB",  "decimals": 18 }
             ]' > ./etc/tokens/localhost.json`);
     } else if (command == 'new') {
         await utils.spawn(
